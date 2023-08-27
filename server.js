@@ -31,6 +31,20 @@ app.post("/send-message", async (req, res) => {
   }
 });
 
+app.post("/purge-queue", async (req, res) => {
+  const { queueUrl } = req.body;
+  const params = {
+    QueueUrl: queueUrl,
+  };
+
+  try {
+    await sqs.purgeQueue(params).promise();
+    res.json({ message: "Queue purged successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
 app.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
